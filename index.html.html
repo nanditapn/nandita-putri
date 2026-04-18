@@ -1,0 +1,1075 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+  :root {
+    --yellow: #FFD600;
+    --yellow-dark: #E6B800;
+    --yellow-light: #FFF9D6;
+    --pink: #FF3B6B;
+    --orange: #FF6B1A;
+    --text: #1A1A1A;
+    --text-muted: #888;
+    --bg: #F5F5F5;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  .phone {
+    width: 380px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+  }
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    position: relative;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .bottom-nav {
+    height: 60px;
+    background: var(--white);
+    border-top: 0.5px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+  }
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+  }
+  .nav-btn.active .nav-icon { color: var(--text); }
+  .nav-btn.active .nav-label { color: var(--text); font-weight: 600; }
+  .nav-icon { font-size: 20px; color: var(--text-muted); }
+  .nav-label { font-size: 11px; color: var(--text-muted); }
+
+  /* Pages */
+  .page { display: none; flex-direction: column; height: 100%; }
+  .page.active { display: flex; }
+
+  /* BERANDA */
+  .header-yellow {
+    background: var(--yellow);
+    padding: 14px 16px 12px;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .logo { font-size: 24px; font-weight: 900; color: var(--text); letter-spacing: -1px; }
+  .logo span { color: var(--pink); }
+  .location-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .search-bar {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 14px 12px;
+    background: var(--white);
+  }
+  .cat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .cat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #FFF3E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    position: relative;
+  }
+  .cat-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--pink);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 8px;
+  }
+  .cat-label { font-size: 11px; font-weight: 500; color: var(--text); text-align: center; }
+
+  .banner-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .banner-row::-webkit-scrollbar { display: none; }
+  .banner-card {
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    padding: 14px;
+    width: 140px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .banner-yellow { background: var(--yellow); }
+  .banner-pink { background: linear-gradient(135deg, var(--pink), #FF6B9D); }
+  .banner-orange { background: linear-gradient(135deg, var(--orange), #FF9F45); }
+  .banner-title { font-size: 13px; font-weight: 800; color: var(--white); line-height: 1.2; }
+  .banner-yellow .banner-title { color: var(--text); }
+  .banner-sub { font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 3px; }
+  .banner-yellow .banner-sub { color: var(--text-muted); }
+  .banner-big { font-size: 20px; font-weight: 900; color: var(--white); }
+  .flash-timer { font-size: 11px; font-weight: 700; background: rgba(0,0,0,0.2); color: white; padding: 2px 6px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    padding: 12px 12px 6px;
+    background: var(--white);
+  }
+  .promo-card {
+    background: var(--white);
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 0.5px solid #F0F0F0;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .promo-card:active { background: #FAFAFA; }
+  .promo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-sm);
+    background: #F5F5F5;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    overflow: hidden;
+  }
+  .promo-info { flex: 1; }
+  .promo-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .promo-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }
+  .promo-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+  .tag-fire { font-size: 10px; color: var(--orange); font-weight: 600; }
+  .tag-green { font-size: 10px; color: #00A651; font-weight: 600; }
+  .promo-discount { font-size: 12px; color: var(--pink); font-weight: 700; }
+
+  /* JELAJAHI */
+  .jelajah-header {
+    background: var(--yellow);
+    padding: 14px 16px 0;
+  }
+  .tab-row {
+    display: flex;
+    gap: 0;
+  }
+  .tab-btn {
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+  }
+  .tab-btn.active { color: var(--text); border-bottom: 3px solid var(--text); }
+  .jelajah-search {
+    background: var(--white);
+    border-radius: 24px;
+    margin: 10px 0 14px;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .choice-grid {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 12px 10px;
+    scrollbar-width: none;
+  }
+  .choice-grid::-webkit-scrollbar { display: none; }
+  .choice-card {
+    flex-shrink: 0;
+    width: 110px;
+    height: 90px;
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .choice-bg { width: 100%; height: 100%; display: flex; align-items: flex-end; padding: 8px; }
+  .choice-card:nth-child(1) .choice-bg { background: linear-gradient(135deg, #1A1A2E, #16213E); }
+  .choice-card:nth-child(2) .choice-bg { background: linear-gradient(135deg, var(--orange), #FF9F45); }
+  .choice-card:nth-child(3) .choice-bg { background: linear-gradient(135deg, #2C3E50, #4A6274); }
+  .choice-label { font-size: 12px; font-weight: 700; color: white; line-height: 1.2; }
+  .choice-sub { font-size: 10px; color: rgba(255,255,255,0.75); }
+  .reko-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .reko-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--white);
+    cursor: pointer;
+  }
+  .reko-img {
+    width: 100%;
+    height: 100px;
+    background: #E8E8E8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    position: relative;
+  }
+  .reko-dist { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.55); color: white; font-size: 10px; padding: 2px 6px; border-radius: 6px; }
+  .reko-name { font-size: 12px; font-weight: 600; padding: 6px 8px; color: var(--text); }
+
+  /* PESANAN */
+  .pesanan-header {
+    background: var(--white);
+    padding: 14px 16px 0;
+    border-bottom: 0.5px solid #E0E0E0;
+  }
+  .pesanan-title { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--text); }
+  
+  /* SEARCH FEATURE */
+  .smart-search-box {
+    margin: 0 12px 8px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--yellow);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(255,214,0,0.2);
+  }
+  .smart-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: var(--text);
+    background: transparent;
+  }
+  .smart-search-input::placeholder { color: var(--text-muted); }
+  .search-clear {
+    font-size: 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    display: none;
+  }
+  
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    padding: 0 12px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid #E0E0E0;
+    background: var(--white);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .chip.active {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--text);
+  }
+
+  .search-result-info {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 0 12px 6px;
+    display: none;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 12px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: #F0F0F0;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .filter-tab.active {
+    background: var(--text);
+    color: var(--white);
+  }
+
+  .order-list { padding: 0 12px; }
+  .order-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 0.5px solid #E8E8E8;
+    transition: all 0.2s;
+  }
+  .order-card.highlight {
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 2px rgba(255,214,0,0.25);
+  }
+  .order-card-hidden { display: none !important; }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .order-merchant { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+  .order-status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .status-selesai { background: #E8F5E9; color: #2E7D32; }
+  .status-proses { background: #FFF8E1; color: #F57F17; }
+  .status-batal { background: #FFEBEE; color: #C62828; }
+  .order-body { display: flex; gap: 10px; }
+  .order-img {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-sm);
+    background: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .order-detail { flex: 1; }
+  .order-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+  .order-orig { font-size: 11px; color: var(--text-muted); text-decoration: line-through; }
+  .order-avail { font-size: 11px; color: var(--text-muted); }
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px solid #F0F0F0;
+  }
+  .order-paid { font-size: 13px; font-weight: 700; color: var(--text); }
+  .order-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .order-no { font-size: 10px; color: var(--text-muted); font-family: monospace; }
+  .btn-review {
+    background: var(--yellow);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  .btn-review:active { opacity: 0.8; }
+  .btn-reorder {
+    background: #F5F5F5;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .highlight-text {
+    background: rgba(255,214,0,0.5);
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    display: none;
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .empty-sub { font-size: 13px; color: var(--text-muted); }
+
+  .search-suggestions {
+    background: var(--white);
+    border-radius: var(--radius);
+    margin: 0 12px 8px;
+    border: 0.5px solid #E8E8E8;
+    overflow: hidden;
+    display: none;
+  }
+  .suggestion-item {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    border-bottom: 0.5px solid #F0F0F0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.1s;
+  }
+  .suggestion-item:last-child { border-bottom: none; }
+  .suggestion-item:hover { background: #FAFAFA; }
+  .sug-icon { font-size: 14px; }
+  .sug-meta { font-size: 11px; color: var(--text-muted); }
+
+  /* AKUN */
+  .akun-header {
+    background: #FFFDE7;
+    padding: 20px 16px 14px;
+  }
+  .akun-profile { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  .akun-name { font-size: 20px; font-weight: 800; color: var(--text); }
+  .akun-id { font-size: 12px; color: var(--text-muted); }
+  .akun-arrow { margin-left: auto; color: var(--text-muted); font-size: 16px; }
+  .savings-card {
+    background: var(--yellow);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .savings-text { font-size: 13px; color: var(--text); }
+  .savings-amount { font-weight: 800; }
+  .wallet-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .wallet-item {
+    padding: 12px;
+    text-align: left;
+    border-right: 0.5px solid #F0F0F0;
+    cursor: pointer;
+  }
+  .wallet-item:last-child { border-right: none; }
+  .wallet-label { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 3px; }
+  .wallet-value { font-size: 20px; font-weight: 800; color: var(--text); margin-top: 2px; }
+  .menu-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    margin: 0 0 10px;
+    overflow: hidden;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 0.5px solid #F0F0F0;
+    cursor: pointer;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .menu-label { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+  .menu-sub { font-size: 11px; color: var(--pink); font-weight: 600; }
+  .menu-arrow { color: var(--text-muted); font-size: 14px; }
+</style>
+
+<h2 class="sr-only">Prototipe aplikasi Qpon — beranda, jelajahi, pesanan dengan pencarian cerdas, dan akun pengguna</h2>
+
+<div style="display:flex;justify-content:center;align-items:flex-start;padding:8px 0;background:var(--color-background-secondary);">
+<div class="phone">
+
+  <!-- SCREEN -->
+  <div class="screen" id="mainScreen">
+
+    <!-- BERANDA -->
+    <div class="page active" id="page-beranda">
+      <div class="header-yellow">
+        <div class="header-top">
+          <div class="logo">q<span>po</span>n</div>
+          <div class="location-pill">📍 Tambaksari ▾</div>
+        </div>
+        <div class="search-bar">🔍 <span>Cari promo & merchant...</span></div>
+      </div>
+
+      <div class="categories">
+        <div class="cat-item"><div class="cat-icon">☕</div><div class="cat-label">Minuman</div></div>
+        <div class="cat-item"><div class="cat-icon">🎂</div><div class="cat-label">Desserts</div></div>
+        <div class="cat-item"><div class="cat-icon" style="background:#FFE0E0;"><div class="cat-badge">-50%</div>🍖</div><div class="cat-label">Makanan</div></div>
+        <div class="cat-item"><div class="cat-icon" style="background:#E8F4FD;">🎭</div><div class="cat-label">Gaya Hidup</div></div>
+        <div class="cat-item"><div class="cat-icon" style="background:#F3E5F5;">🎁</div><div class="cat-label">Pusat Bonus</div></div>
+        <div class="cat-item"><div class="cat-icon" style="background:#E8F5E9;">👥</div><div class="cat-label">Ajak Teman</div></div>
+        <div class="cat-item"><div class="cat-icon">🛍️</div><div class="cat-label">Pasti Hemat</div></div>
+        <div class="cat-item"><div class="cat-icon" style="background:#E0F7FA;"><div class="cat-badge" style="background:#00BFA5;">NEW</div>🏪</div><div class="cat-label">Terbaru</div></div>
+      </div>
+
+      <div class="banner-row">
+        <div class="banner-card banner-yellow">
+          <div class="banner-title">Kupon Spesial Untukmu!</div>
+          <div class="banner-sub" style="color:#555;">Gabung Sekarang →</div>
+        </div>
+        <div class="banner-card banner-pink">
+          <div class="flash-timer">⏱ 01:06:54</div>
+          <div class="banner-title">Flash Sale</div>
+          <div class="banner-big">60% off</div>
+        </div>
+        <div class="banner-card banner-orange">
+          <div class="banner-title">Brand Great Offers</div>
+          <div style="display:flex;gap:4px;margin-top:6px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;">W</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;">H</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);margin-top:6px;">
+        <div class="section-title">Promo di Sekitarmu</div>
+        <div class="promo-card">
+          <div class="promo-img">🍗</div>
+          <div class="promo-info">
+            <div class="promo-name">KFC – PASARAYA MANGGA...</div>
+            <div class="promo-meta">⭐ 4.4(236) | Makanan Cepat Saji</div>
+            <div class="promo-tags"><span class="tag-fire">🔥 10RB+ Terjual</span><span style="font-size:10px;color:var(--pink);font-weight:600;">🎫 Rp5.000 off</span></div>
+            <div class="promo-discount">-41% Rp95.000 · Super Treat</div>
+            <div class="promo-discount">-53% Rp45.000 · Petoook Winger</div>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-img">🧋</div>
+          <div class="promo-info">
+            <div class="promo-name">MOMOYO – JOHAR BARU</div>
+            <div class="promo-meta">⭐ 4.7(1907) | Minuman</div>
+            <div class="promo-tags"><span class="tag-green">🟢 Promo Baru</span><span class="tag-fire">🔥 10RB+ Terjual</span></div>
+            <div class="promo-discount">-41% Rp23.900 · NEW SERIES NO.1...</div>
+            <div class="promo-discount">-38% Rp17.000 · 2 Sundae D...</div>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-img">🍕</div>
+          <div class="promo-info">
+            <div class="promo-name">PIZZA HUT – RUNGKUT</div>
+            <div class="promo-meta">⭐ 4.5(892) | Makanan</div>
+            <div class="promo-tags"><span class="tag-fire">🔥 5RB+ Terjual</span></div>
+            <div class="promo-discount">-35% Rp55.000 · Personal Pan Pizza</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JELAJAHI -->
+    <div class="page" id="page-jelajahi">
+      <div class="jelajah-header">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="tab-row">
+            <button class="tab-btn active">Jelajahi</button>
+            <button class="tab-btn">Pilihan</button>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">📍 Ketabang ▾</div>
+        </div>
+        <div class="jelajah-search">🔍 <span>MOMOYO</span></div>
+      </div>
+
+      <div style="background:var(--white);padding:10px 0;">
+        <div style="display:flex;gap:14px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none;">
+          <div class="cat-item"><div class="cat-icon" style="background:#FFF3E0;border-radius:12px;width:56px;height:56px;">🍽️</div><div class="cat-label">Restoran</div></div>
+          <div class="cat-item"><div class="cat-icon" style="background:#FFF8E1;border-radius:12px;width:56px;height:56px;">☕</div><div class="cat-label">Kafe & Minuman</div></div>
+          <div class="cat-item"><div class="cat-icon" style="background:#F3E5F5;border-radius:12px;width:56px;height:56px;">🧖</div><div class="cat-label">Wellness</div></div>
+          <div class="cat-item"><div class="cat-icon" style="background:#E3F2FD;border-radius:12px;width:56px;height:56px;">🎬</div><div class="cat-label">Hiburan</div></div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);margin-top:6px;padding-bottom:10px;">
+        <div class="section-title">Qpon Choice</div>
+        <div class="choice-grid">
+          <div class="choice-card"><div class="choice-bg"><div><div class="choice-label">Resto Pilihan</div><div class="choice-sub">Viral 2026</div></div></div></div>
+          <div class="choice-card"><div class="choice-bg"><div><div class="choice-label">Makan Hemat</div><div class="choice-sub">Terjangkau</div></div></div></div>
+          <div class="choice-card"><div class="choice-bg" style="background:linear-gradient(135deg,#2C3E50,#4A6274);"><div><div class="choice-label">Cafe Deal</div><div class="choice-sub">Promo Qpon</div></div></div></div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);margin-top:6px;padding-bottom:10px;">
+        <div class="section-title">Rekomendasi di Sekitarmu</div>
+        <div class="reko-grid">
+          <div class="reko-card">
+            <div class="reko-img">🥩<div class="reko-dist">198m</div></div>
+            <div class="reko-name">Kampoeng Steak</div>
+          </div>
+          <div class="reko-card">
+            <div class="reko-img">🍢<div class="reko-dist">241m</div></div>
+            <div class="reko-name">Bakigo Kedai Toenjoek</div>
+          </div>
+          <div class="reko-card">
+            <div class="reko-img">🧋<div class="reko-dist">310m</div></div>
+            <div class="reko-name">Momoyo Surabaya</div>
+          </div>
+          <div class="reko-card">
+            <div class="reko-img">🍜<div class="reko-dist">450m</div></div>
+            <div class="reko-name">Warung Pak Budi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PESANAN -->
+    <div class="page" id="page-pesanan">
+      <div class="pesanan-header">
+        <div class="pesanan-title">Pesanan</div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterStatus(this,'semua')">Semua</button>
+          <button class="filter-tab" onclick="filterStatus(this,'belum')">Belum Ditukar</button>
+          <button class="filter-tab" onclick="filterStatus(this,'proses')">Menunggu Bayar</button>
+          <button class="filter-tab" onclick="filterStatus(this,'selesai')">Selesai</button>
+        </div>
+      </div>
+
+      <!-- SMART SEARCH -->
+      <div style="margin-top:10px;">
+        <div class="smart-search-box">
+          <span style="font-size:16px;">🔍</span>
+          <input class="smart-search-input" id="orderSearch" type="text" placeholder="Cari nama produk, merchant, tanggal, no. pesanan..." oninput="handleSearch(this.value)" onfocus="showSuggestions()" />
+          <span class="search-clear" id="searchClear" onclick="clearSearch()">✕</span>
+        </div>
+
+        <div class="search-suggestions" id="searchSuggestions">
+          <div class="suggestion-item" onclick="selectSuggestion('MOMOYO')"><span class="sug-icon">🏪</span><div><div>MOMOYO</div><div class="sug-meta">Merchant</div></div></div>
+          <div class="suggestion-item" onclick="selectSuggestion('Choco Ice Cream')"><span class="sug-icon">🍦</span><div><div>Choco Ice Cream</div><div class="sug-meta">Produk</div></div></div>
+          <div class="suggestion-item" onclick="selectSuggestion('KFC')"><span class="sug-icon">🍗</span><div><div>KFC</div><div class="sug-meta">Merchant</div></div></div>
+          <div class="suggestion-item" onclick="selectSuggestion('17 Apr 2026')"><span class="sug-icon">📅</span><div><div>17 Apr 2026</div><div class="sug-meta">Tanggal transaksi</div></div></div>
+          <div class="suggestion-item" onclick="selectSuggestion('QPO-20260417')"><span class="sug-icon">#️⃣</span><div><div>QPO-20260417-0012</div><div class="sug-meta">Nomor pesanan</div></div></div>
+        </div>
+
+        <div class="filter-chips">
+          <div class="chip active" onclick="toggleChip(this,'all')">Semua Filter</div>
+          <div class="chip" onclick="toggleChip(this,'merchant')">🏪 Merchant</div>
+          <div class="chip" onclick="toggleChip(this,'produk')">🎫 Produk</div>
+          <div class="chip" onclick="toggleChip(this,'tanggal')">📅 Tanggal</div>
+          <div class="chip" onclick="toggleChip(this,'nopesanan')">🔢 No. Pesanan</div>
+        </div>
+
+        <div class="search-result-info" id="searchResultInfo"></div>
+      </div>
+
+      <!-- ORDER LIST -->
+      <div class="order-list" id="orderList">
+
+        <div class="order-card" id="order1" data-merchant="momoyo" data-product="choco ice cream" data-date="17 apr 2026" data-no="qpo-20260417-0012" data-status="selesai">
+          <div class="order-header">
+            <div class="order-merchant">MOMOYO</div>
+            <div class="order-status-badge status-selesai">✓ Selesai</div>
+          </div>
+          <div class="order-body">
+            <div class="order-img">🍦</div>
+            <div class="order-detail">
+              <div class="order-name" id="order1-name">【TERMURAH】 Choco Ice Cream</div>
+              <div class="order-orig">Harga Asli: Rp9.900</div>
+              <div class="order-avail">• Tersedia sepanjang hari</div>
+              <div class="order-no" id="order1-no">No: QPO-20260417-0012</div>
+            </div>
+          </div>
+          <div class="order-footer">
+            <div>
+              <div class="order-paid">Dibayar Rp3.500</div>
+              <div class="order-date" id="order1-date">Selesai 17 Apr 2026, 14:34</div>
+            </div>
+            <button class="btn-review">Tulis Review</button>
+          </div>
+        </div>
+
+        <div class="order-card" id="order2" data-merchant="kfc" data-product="petoook winger duo" data-date="15 apr 2026" data-no="qpo-20260415-0089" data-status="selesai">
+          <div class="order-header">
+            <div class="order-merchant">KFC – PASARAYA MANGGA</div>
+            <div class="order-status-badge status-selesai">✓ Selesai</div>
+          </div>
+          <div class="order-body">
+            <div class="order-img">🍗</div>
+            <div class="order-detail">
+              <div class="order-name" id="order2-name">Petoook Winger Duo</div>
+              <div class="order-orig">Harga Asli: Rp45.000</div>
+              <div class="order-avail">• Dine in & Take away</div>
+              <div class="order-no" id="order2-no">No: QPO-20260415-0089</div>
+            </div>
+          </div>
+          <div class="order-footer">
+            <div>
+              <div class="order-paid">Dibayar Rp26.550</div>
+              <div class="order-date" id="order2-date">Selesai 15 Apr 2026, 19:12</div>
+            </div>
+            <button class="btn-review">Tulis Review</button>
+          </div>
+        </div>
+
+        <div class="order-card" id="order3" data-merchant="pizza hut" data-product="personal pan pizza" data-date="10 apr 2026" data-no="qpo-20260410-0045" data-status="belum">
+          <div class="order-header">
+            <div class="order-merchant">PIZZA HUT – RUNGKUT</div>
+            <div class="order-status-badge status-proses">⏳ Belum Ditukar</div>
+          </div>
+          <div class="order-body">
+            <div class="order-img">🍕</div>
+            <div class="order-detail">
+              <div class="order-name" id="order3-name">Personal Pan Pizza</div>
+              <div class="order-orig">Harga Asli: Rp55.000</div>
+              <div class="order-avail">• Berlaku s/d 30 Apr 2026</div>
+              <div class="order-no" id="order3-no">No: QPO-20260410-0045</div>
+            </div>
+          </div>
+          <div class="order-footer">
+            <div>
+              <div class="order-paid">Dibayar Rp35.750</div>
+              <div class="order-date" id="order3-date">Dibeli 10 Apr 2026, 11:00</div>
+            </div>
+            <button class="btn-review" style="background:#F5F5F5;color:var(--text);">Tukar Sekarang</button>
+          </div>
+        </div>
+
+        <div class="order-card" id="order4" data-merchant="momoyo" data-product="2 sundae dream series" data-date="5 apr 2026" data-no="qpo-20260405-0031" data-status="selesai">
+          <div class="order-header">
+            <div class="order-merchant">MOMOYO – JOHAR BARU</div>
+            <div class="order-status-badge status-selesai">✓ Selesai</div>
+          </div>
+          <div class="order-body">
+            <div class="order-img">🧋</div>
+            <div class="order-detail">
+              <div class="order-name" id="order4-name">2 Sundae Dream Series</div>
+              <div class="order-orig">Harga Asli: Rp34.000</div>
+              <div class="order-avail">• Tersedia sepanjang hari</div>
+              <div class="order-no" id="order4-no">No: QPO-20260405-0031</div>
+            </div>
+          </div>
+          <div class="order-footer">
+            <div>
+              <div class="order-paid">Dibayar Rp20.000</div>
+              <div class="order-date" id="order4-date">Selesai 5 Apr 2026, 16:20</div>
+            </div>
+            <button class="btn-review">Tulis Review</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">Pesanan tidak ditemukan</div>
+        <div class="empty-sub">Coba kata kunci lain atau ubah filter pencarian</div>
+      </div>
+
+      <div style="text-align:center;padding:16px;font-size:12px;color:var(--text-muted);" id="allShown">Semua pesanan sudah ditampilkan</div>
+    </div>
+
+    <!-- AKUN -->
+    <div class="page" id="page-akun">
+      <div class="akun-header">
+        <div class="akun-profile">
+          <div class="avatar">👤</div>
+          <div>
+            <div class="akun-name">Apa kabar, Putri</div>
+            <div class="akun-id">ID Pengguna: C17557619</div>
+          </div>
+          <div class="akun-arrow">›</div>
+        </div>
+        <div class="savings-card">
+          <div class="savings-text">Tahun ini kamu hemat <span class="savings-amount">Rp6.400</span></div>
+          <div class="wallet-row" style="margin-top:10px;">
+            <div class="wallet-item"><div class="wallet-label">Qpon Coins ›</div><div class="wallet-value">0</div></div>
+            <div class="wallet-item"><div class="wallet-label">Saldo Refund ›</div><div class="wallet-value" style="font-size:14px;padding-top:4px;">Rp0</div></div>
+            <div class="wallet-item"><div class="wallet-label">Kupon ›</div><div class="wallet-value">1</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:10px 12px;">
+        <div class="menu-card">
+          <div class="menu-item">
+            <div class="menu-icon-box" style="background:#FFF3E0;">🎁</div>
+            <div><div class="menu-label">Pusat Bonus</div><div class="menu-sub">Menangkan iPhone 17!</div></div>
+            <button class="btn-review" style="font-size:11px;padding:6px 12px;">Mulai</button>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon-box" style="background:#FFF8E1;">👥</div>
+            <div><div class="menu-label">Ajak Teman</div><div class="menu-sub">MOMOYO Cuma Rp8K!</div></div>
+            <button class="btn-review" style="font-size:11px;padding:6px 12px;">Undang</button>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-item"><div class="menu-icon-box" style="background:#F3E5F5;">🔖</div><div class="menu-label">Favorit Saya</div><div class="menu-arrow" style="margin-left:auto;">›</div></div>
+          <div class="menu-item"><div class="menu-icon-box" style="background:#E8F5E9;">⭐</div><div class="menu-label">Review Saya</div><div class="menu-arrow" style="margin-left:auto;">›</div></div>
+          <div class="menu-item"><div class="menu-icon-box" style="background:#E3F2FD;">❓</div><div class="menu-label">Pusat Bantuan</div><div class="menu-arrow" style="margin-left:auto;">›</div></div>
+          <div class="menu-item"><div class="menu-icon-box" style="background:#F5F5F5;">⚙️</div><div class="menu-label">Pengaturan</div><div class="menu-arrow" style="margin-left:auto;">›</div></div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0;">Versi v2.26.0.0</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="nav-beranda" onclick="switchPage('beranda')">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Beranda</div>
+    </button>
+    <button class="nav-btn" id="nav-jelajahi" onclick="switchPage('jelajahi')">
+      <div class="nav-icon">✖</div>
+      <div class="nav-label">Jelajahi</div>
+    </button>
+    <button class="nav-btn" id="nav-pesanan" onclick="switchPage('pesanan')">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">Pesanan</div>
+    </button>
+    <button class="nav-btn" id="nav-akun" onclick="switchPage('akun')">
+      <div class="nav-icon">😊</div>
+      <div class="nav-label">Akun</div>
+    </button>
+  </div>
+
+</div>
+</div>
+
+<script>
+function switchPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  document.getElementById('mainScreen').scrollTop = 0;
+  if (page !== 'pesanan') {
+    hideSuggestions();
+  }
+}
+
+let currentStatusFilter = 'semua';
+let currentChipFilter = 'all';
+
+function filterStatus(btn, status) {
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentStatusFilter = status;
+  applyFilters();
+}
+
+function toggleChip(chip, type) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  currentChipFilter = type;
+  const q = document.getElementById('orderSearch').value;
+  if (q) applyFilters();
+}
+
+let searchTimeout;
+function handleSearch(val) {
+  clearTimeout(searchTimeout);
+  const clear = document.getElementById('searchClear');
+  clear.style.display = val ? 'block' : 'none';
+  if (val.length > 0) {
+    showSuggestions(val);
+    searchTimeout = setTimeout(() => applyFilters(), 300);
+  } else {
+    hideSuggestions();
+    applyFilters();
+  }
+}
+
+function showSuggestions(q) {
+  const box = document.getElementById('searchSuggestions');
+  if (!q || q.length === 0) {
+    box.style.display = 'block';
+    return;
+  }
+  const items = box.querySelectorAll('.suggestion-item');
+  let any = false;
+  items.forEach(item => {
+    const txt = item.textContent.toLowerCase();
+    if (txt.includes(q.toLowerCase())) { item.style.display = 'flex'; any = true; }
+    else { item.style.display = 'none'; }
+  });
+  box.style.display = any ? 'block' : 'none';
+}
+
+function hideSuggestions() {
+  document.getElementById('searchSuggestions').style.display = 'none';
+}
+
+function selectSuggestion(val) {
+  document.getElementById('orderSearch').value = val;
+  document.getElementById('searchClear').style.display = 'block';
+  hideSuggestions();
+  applyFilters();
+}
+
+function clearSearch() {
+  document.getElementById('orderSearch').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  hideSuggestions();
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('orderSearch').value.toLowerCase().trim();
+  const orders = document.querySelectorAll('.order-card');
+  let visibleCount = 0;
+
+  orders.forEach(card => {
+    const merchant = card.dataset.merchant || '';
+    const product = card.dataset.product || '';
+    const date = card.dataset.date || '';
+    const no = card.dataset.no || '';
+    const status = card.dataset.status || '';
+
+    let statusMatch = true;
+    if (currentStatusFilter === 'belum') statusMatch = status === 'belum';
+    else if (currentStatusFilter === 'selesai') statusMatch = status === 'selesai';
+    else if (currentStatusFilter === 'proses') statusMatch = status === 'proses';
+
+    let searchMatch = true;
+    if (q) {
+      if (currentChipFilter === 'merchant') searchMatch = merchant.includes(q);
+      else if (currentChipFilter === 'produk') searchMatch = product.includes(q);
+      else if (currentChipFilter === 'tanggal') searchMatch = date.includes(q);
+      else if (currentChipFilter === 'nopesanan') searchMatch = no.includes(q);
+      else searchMatch = merchant.includes(q) || product.includes(q) || date.includes(q) || no.includes(q);
+    }
+
+    if (statusMatch && searchMatch) {
+      card.classList.remove('order-card-hidden');
+      card.classList.add('highlight');
+      visibleCount++;
+      if (q) highlightText(card, q);
+      else removeHighlight(card);
+    } else {
+      card.classList.add('order-card-hidden');
+      card.classList.remove('highlight');
+    }
+  });
+
+  if (!q) {
+    document.querySelectorAll('.order-card').forEach(c => { c.classList.remove('highlight'); removeHighlight(c); });
+  }
+
+  const info = document.getElementById('searchResultInfo');
+  const empty = document.getElementById('emptyState');
+  const allShown = document.getElementById('allShown');
+
+  if (q) {
+    info.style.display = 'block';
+    info.textContent = visibleCount > 0 ? `Ditemukan ${visibleCount} pesanan untuk "${q}"` : '';
+  } else {
+    info.style.display = 'none';
+  }
+
+  empty.style.display = (visibleCount === 0) ? 'block' : 'none';
+  allShown.style.display = (visibleCount > 0 && !q) ? 'block' : 'none';
+}
+
+function highlightText(card, q) {
+  const nameEls = card.querySelectorAll('.order-name, .order-merchant, .order-date, .order-no');
+  nameEls.forEach(el => {
+    const origId = el.id;
+    const text = el.textContent;
+    const regex = new RegExp('(' + escapeRegex(q) + ')', 'gi');
+    el.innerHTML = text.replace(regex, '<span class="highlight-text">$1</span>');
+  });
+}
+
+function removeHighlight(card) {
+  const nameEls = card.querySelectorAll('.order-name, .order-merchant, .order-date, .order-no');
+  nameEls.forEach(el => { el.innerHTML = el.textContent; });
+}
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.smart-search-box') && !e.target.closest('.search-suggestions')) {
+    hideSuggestions();
+  }
+});
+</script>
